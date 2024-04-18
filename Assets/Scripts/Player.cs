@@ -1,53 +1,64 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     Rigidbody2D rb;
     Vector2 input;
+    public float moveSpeed = 20f;
     public AudioClip CollectSound;
     public AudioClip StarSound;
     public AudioClip CoinSound;
     public AudioClip Landing;
-    public GameObject hitVFX;
-    bool vfxInstantiated = false;
-    void Start()
+    public GameObject landParticles;
+    Vector2 lvl2;
+    Vector2 lvl3;
+    bool hasLanded;
+
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        lvl2 = new Vector2(10.4f, 5.5f);
+        lvl3 = new Vector2(-0.49f, -0.91f);
+
+        DontDestroyOnLoad(gameObject);
+
+        if (FindObjectsOfType<Player>().Length > 1)
+        {
+            Destroy(gameObject);
+        }
     }
 
-
-    void Update()
+    private void Update()
     {
-        
-        if (rb.velocity.magnitude < 0.1f)
-        {
-            Vector2 movement = Vector2.zero;
-            movement.x = Input.GetAxisRaw("Horizontal");
-            movement.y = Input.GetAxisRaw("Vertical");
+        var newInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-            if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
-            {
-                movement.y = 0;
-            }
-            else
-            {
-                movement.x = 0;
-            }
-
-            if (movement != Vector2.zero)
-            {
-                input = movement.normalized;
-                transform.up = -input;
-            }
-        }
-        else
+        if (Mathf.Abs(newInput.x) > 0 && Mathf.Abs(newInput.y) > 0)
         {
-            input = rb.velocity.normalized; 
+            newInput.y = 0;
         }
 
-        rb.velocity = input * 30f;
+        if (rb.velocity.magnitude < 0.1f && !hasLanded && newInput != input && newInput != Vector2.zero)
+        {
+            if (landParticles != null)
+            {
+                GameObject particles = Instantiate(landParticles, transform.position, Quaternion.identity);
+                AudioSystem.Play(Landing);
+                StartCoroutine(destroyVFX(particles));
+            }
+            hasLanded = true;
+        }
+
+        if (newInput != Vector2.zero && rb.velocity.magnitude < 0.1f)
+        {
+            input = newInput;
+            transform.up = -input;
+            hasLanded = false;
+        }
+        rb.velocity = input * moveSpeed;
     }
 
 
@@ -71,25 +82,29 @@ public class Player : MonoBehaviour
             Destroy(other.gameObject);
             AudioSystem.Play(CoinSound);
         }
+        if (other.gameObject.CompareTag("TP"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            transform.position = lvl2;
+        }
+        if (other.gameObject.CompareTag("TP2"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            transform.position = lvl3;
+        }
+        if (other.gameObject.CompareTag("TP3"))
+        {
+            SceneManager.LoadScene("LVL1");
+        }
         else
         {
             Destroy(other.gameObject);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public IEnumerator destroyVFX(GameObject particle)
     {
-        if (collision.gameObject.tag == "Ground")
-        {
-            Instantiate(hitVFX, transform.position, Quaternion.identity);
-            AudioSystem.Play(Landing);
-        }
+        yield return new WaitForSeconds(0.75f);
+        Destroy(particle);
     }
-
-
-
-
-
-
-
 }

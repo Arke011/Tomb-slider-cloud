@@ -9,6 +9,9 @@ TagManager:
   - VFX
   - Coin
   - Ground
+  - TP
+  - TP2
+  - TP3
   layers:
   - Default
   - TransparentFX

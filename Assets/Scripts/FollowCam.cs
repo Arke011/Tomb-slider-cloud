@@ -8,6 +8,11 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset;
     [Range(0.01f, 0.99f)] public float smoothness;
 
+    void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     void LateUpdate()
     {
 
