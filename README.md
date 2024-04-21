@@ -1,6 +1,6 @@
 Welcome to my copy of the game "Tomb of the Mask".
 
-Use wasd to move, play in fullscreen for a better experience.
+Use wasd to move, play in fullscreen mode for a better experience.
 
 Play here! - https://play.unity.com/mg/other/tombsliderbuild
 
