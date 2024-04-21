@@ -12,6 +12,8 @@ TagManager:
   - TP
   - TP2
   - TP3
+  - pointTXT
+  - Canvas
   layers:
   - Default
   - TransparentFX

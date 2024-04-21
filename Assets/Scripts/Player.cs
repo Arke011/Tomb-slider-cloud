@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -15,14 +16,27 @@ public class Player : MonoBehaviour
     public GameObject landParticles;
     Vector2 lvl2;
     Vector2 lvl3;
+    Vector2 lvl1;
     bool hasLanded;
+    public TMP_Text pointTXT;
+    public int CoinCount;
 
 
     private void Start()
     {
+        GameObject textpoint = GameObject.FindGameObjectWithTag("pointTXT");
+        if (textpoint != null)
+        {
+            pointTXT = textpoint.GetComponent<TMP_Text>(); 
+        }
+        else
+        {
+            Debug.LogWarning("No GameObject with tag 'pointTXT' found!");
+        }
         rb = GetComponent<Rigidbody2D>();
         lvl2 = new Vector2(10.4f, 5.5f);
         lvl3 = new Vector2(-0.49f, -0.91f);
+        lvl1 = new Vector2(-5.51f, -3.51f);
 
         DontDestroyOnLoad(gameObject);
 
@@ -59,6 +73,8 @@ public class Player : MonoBehaviour
             hasLanded = false;
         }
         rb.velocity = input * moveSpeed;
+
+        
     }
 
 
@@ -71,30 +87,38 @@ public class Player : MonoBehaviour
         {
             Destroy(other.gameObject);
             AudioSystem.Play(CollectSound);
+            CoinCount++;
+            pointTXT.text = CoinCount.ToString();
         }
-        if (other.gameObject.CompareTag("Star"))
+        else if (other.gameObject.CompareTag("Star"))
         {
             Destroy(other.gameObject);
             AudioSystem.Play(StarSound);
+            CoinCount += 10;
+            pointTXT.text = CoinCount.ToString();
         }
-        if (other.gameObject.CompareTag("Coin"))
+        else if (other.gameObject.CompareTag("Coin"))
         {
             Destroy(other.gameObject);
             AudioSystem.Play(CoinSound);
+            CoinCount += 5;
+            pointTXT.text = CoinCount.ToString();
         }
-        if (other.gameObject.CompareTag("TP"))
+        else if (other.gameObject.CompareTag("TP"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             transform.position = lvl2;
         }
-        if (other.gameObject.CompareTag("TP2"))
+        else if (other.gameObject.CompareTag("TP2"))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             transform.position = lvl3;
         }
-        if (other.gameObject.CompareTag("TP3"))
+        else if (other.gameObject.CompareTag("TP3"))
         {
             SceneManager.LoadScene("LVL1");
+            transform.position = lvl1;
+            
         }
         else
         {

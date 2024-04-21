@@ -281,6 +281,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: -2253911629886400664, guid: f23134b2bc2d6c44e9fff2c8de9d0361, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: f23134b2bc2d6c44e9fff2c8de9d0361, type: 3}
       propertyPath: m_SortingOrder
       value: 900
@@ -376,6 +380,8 @@ MonoBehaviour:
   CoinSound: {fileID: 8300000, guid: 9e6964c7b6bef574598e6cbbcc8a5633, type: 3}
   Landing: {fileID: 8300000, guid: d8d4dd68bfc370541ae7bda63474d915, type: 3}
   landParticles: {fileID: 2391576375613030839, guid: 7e5bab619c1032941be370b1d2f7fe56, type: 3}
+  pointTXT: {fileID: 0}
+  CoinCount: 0
 --- !u!50 &9152235436988458763
 Rigidbody2D:
   serializedVersion: 4
